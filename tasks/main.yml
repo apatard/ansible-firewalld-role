@@ -27,7 +27,9 @@
 - name: set firewalld default zone
   command: "/bin/firewall-cmd --set-default-zone={{ firewalld_default_zone }}"
   register: result
-  when: defaultzone.stdout != firewalld_default_zone
+  when:
+  - not ansible_check_mode
+  - defaultzone.stdout != firewalld_default_zone
   changed_when: result.stdout == "success"
   tags: firewalld
 
