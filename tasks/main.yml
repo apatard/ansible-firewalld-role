@@ -5,6 +5,15 @@
     state: present
   tags: firewalld
 
+# Note: python3-firewall is available on bpo on buster.
+- name: Install firewalld bindings
+  package:
+    name: python3-firewall
+    state: present
+  when:
+  - ansible_distribution == 'Debian'
+  - ansible_distribution_major_version is version_compare('9','>')
+
 - name: ensure firewalld is enabled and started
   service: name=firewalld enabled=yes state=started
   tags: firewalld
