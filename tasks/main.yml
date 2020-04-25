@@ -39,6 +39,8 @@
     then
       /usr/bin/firewall-cmd --zone={{ item.key }} --add-interface={{ item.value }} --permanent && echo "changed"
     fi
+  args:
+    executable: /bin/bash
   with_dict: "{{ firewalld_zone_interface|default({}) }}"
   register: shell_result
   changed_when: shell_result.stdout | join('') is search('changed')
