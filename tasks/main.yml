@@ -19,13 +19,13 @@
   tags: firewalld
 
 - name: get actual firewalld default zone
-  command: /bin/firewall-cmd --get-default-zone
+  command: /usr/bin/firewall-cmd --get-default-zone
   register: defaultzone
   changed_when: false
   tags: firewalld
 
 - name: set firewalld default zone
-  command: "/bin/firewall-cmd --set-default-zone={{ firewalld_default_zone }}"
+  command: "/usr/bin/firewall-cmd --set-default-zone={{ firewalld_default_zone }}"
   register: result
   when:
   - not ansible_check_mode
@@ -35,9 +35,9 @@
 
 - name: set firewalld zone interface
   shell: |
-    if [[ "$(/bin/firewall-cmd --get-zone-of-interface={{ item.value }})" != "{{ item.key }}" ]]
+    if [[ "$(/usr/bin/firewall-cmd --get-zone-of-interface={{ item.value }})" != "{{ item.key }}" ]]
     then
-      /bin/firewall-cmd --zone={{ item.key }} --add-interface={{ item.value }} --permanent && echo "changed"
+      /usr/bin/firewall-cmd --zone={{ item.key }} --add-interface={{ item.value }} --permanent && echo "changed"
     fi
   with_dict: "{{ firewalld_zone_interface|default({}) }}"
   register: shell_result
@@ -56,7 +56,7 @@
   tags: firewalld
 
 - name: get active firewalld service rules
-  shell: set -o pipefail; /bin/firewall-cmd --list-services | sed -e 's/ /\n/g'
+  shell: set -o pipefail; /usr/bin/firewall-cmd --list-services | sed -e 's/ /\n/g'
   args:
     executable: /bin/bash
   register: active_services
