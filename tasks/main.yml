@@ -11,8 +11,8 @@
     name: python3-firewall
     state: present
   when:
-  - ansible_distribution == 'Debian'
-  - ansible_distribution_major_version is version_compare('9','>')
+    - ansible_distribution == 'Debian'
+    - ansible_distribution_major_version is version_compare('9','>')
 
 - name: ensure firewalld is enabled and started
   service: name=firewalld enabled=yes state=started
@@ -28,8 +28,8 @@
   command: "/usr/bin/firewall-cmd --set-default-zone={{ firewalld_default_zone }}"
   register: result
   when:
-  - not ansible_check_mode
-  - defaultzone.stdout != firewalld_default_zone
+    - not ansible_check_mode
+    - defaultzone.stdout != firewalld_default_zone
   changed_when: result.stdout == "success"
   tags: firewalld
 
