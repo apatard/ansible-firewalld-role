@@ -73,7 +73,9 @@
     state: disabled
     zone: "{{ firewalld_default_zone }}"
   with_items: "{{ active_services.stdout_lines }}"
-  when: firewalld_purge_services and item not in firewalld_service_rules
+  when:
+    - not ansible_check_mode
+    - firewalld_purge_services and item not in firewalld_service_rules
   tags: firewalld
 
 - name: set firewalld service rules
